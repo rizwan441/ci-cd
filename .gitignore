@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+build/
+dist/
+.env
+.env.*  # optional for multiple env files
+npm-debug.log*
+
+# Docker volumes
+postgres-data/
+
+# Logs
+logs
+*.log
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/

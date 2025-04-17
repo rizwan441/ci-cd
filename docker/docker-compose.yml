@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ../backend
+    container_name: backend
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - PORT=${PORT}
+    networks:
+      - mynetwork
+    depends_on:
+      - postgres-db
+
+  frontend:
+    build:
+      context: ../frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - mynetwork
+    depends_on:
+      - backend
+
+  postgres-db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ../postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
